@@ -59,10 +59,8 @@ const SelectPlan: React.FC<IActionButtons> = ({ prevStep, nextStep }: IActionBut
     const savedFormData = localStorage.getItem('formData');
     if (savedFormData) {
       const parsedFormData: selectPlanData = JSON.parse(savedFormData);
-      console.log(parsedFormData)
       setFormData(parsedFormData);
       
-
       if (parsedFormData.billingOption === 'Yearly') {
         handleBillingOptionChange();
       }

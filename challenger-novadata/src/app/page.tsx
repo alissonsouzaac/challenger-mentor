@@ -1,6 +1,7 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
+import stepStore from './store/StepStore';
 
 const DynamicInfoPerson = dynamic<any>((): any => import('./components/InfoPerson/InfoPerson'));
 const DynamicSelectPlan = dynamic<any>((): any => import('./components/SelectPlan/SelectPlan'));
@@ -19,51 +20,56 @@ export default function Home() {
       }
   }, []);
     
-      const nextStep = useCallback(() => {
-        const nextStepValue = step + 1;
-        setStep(nextStepValue);
-        if (nextStepValue < 5) {
-          localStorage.setItem('currentStep', String(nextStepValue));
-        } else {
-          localStorage.removeItem('currentStep');
-        }
-      }, [step, setStep]);
-    
-      const prevStep = useCallback(() => {
-        const prevStepValue = Math.max(step - 1, 1);
-        setStep(prevStepValue);
-        localStorage.setItem('currentStep', String(prevStepValue));
-      }, [step, setStep]);
+  const nextStep = useCallback(() => {
+    const nextStepValue = step + 1;
+    setStep(nextStepValue);
 
-      const prevTwoSteps = useCallback(() => {
-        const prevStepValue = Math.max(step - 2, 1);
-        setStep(prevStepValue);
-        localStorage.setItem('currentStep', String(prevStepValue));
-      }, [step, setStep]);
-
-      switch (step) {
-        case 1:
-          return <DynamicInfoPerson nextStep={nextStep} />
+    stepStore.setCurrentStep(nextStepValue)
     
-        case 2:
-          return <DynamicSelectPlan nextStep={nextStep} prevStep={prevStep} />
-    
-        case 3:
-          return (
-            <DynamicPickOnAdds nextStep={nextStep} prevStep={prevStep} />
-          )
+    if (nextStepValue < 5) {
+      localStorage.setItem('currentStep', String(nextStepValue));
+    } else {
+      localStorage.removeItem('currentStep');
+    }
+  }, [step, setStep]);
 
-        case 4:
-          return (
-            <DynamicFinishUp nextStep={nextStep} prevStep={prevStep} prevTwoStep={prevTwoSteps} />
-          )  
+  const prevStep = useCallback(() => {
+    const prevStepValue = Math.max(step - 1, 1);
+    setStep(prevStepValue);
+    stepStore.setCurrentStep(prevStepValue)
+    localStorage.setItem('currentStep', String(prevStepValue));
+  }, [step, setStep]);
 
-        case 5: 
-          return (
-            <DynamicFinalStep />
-          )  
-    
-        default:
-          return <DynamicInfoPerson nextStep={nextStep} />
-      }
+  const prevTwoSteps = useCallback(() => {
+    const prevStepValue = Math.max(step - 2, 1);
+    setStep(prevStepValue);
+    stepStore.setCurrentStep(prevStepValue)
+    localStorage.setItem('currentStep', String(prevStepValue));
+  }, [step, setStep]);
+
+  switch (step) {
+    case 1:
+      return <DynamicInfoPerson nextStep={nextStep} />
+
+    case 2:
+      return <DynamicSelectPlan nextStep={nextStep} prevStep={prevStep} />
+
+    case 3:
+      return (
+        <DynamicPickOnAdds nextStep={nextStep} prevStep={prevStep} />
+      )
+
+    case 4:
+      return (
+        <DynamicFinishUp nextStep={nextStep} prevStep={prevStep} prevTwoStep={prevTwoSteps} />
+      )  
+
+    case 5: 
+      return (
+        <DynamicFinalStep />
+      )  
+
+    default:
+      return <DynamicInfoPerson nextStep={nextStep} />
+  }
 }

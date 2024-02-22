@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { RoundButtonProps } from './types';
+import { autorun } from 'mobx';
+import stepStore from '@/app/store/StepStore';
 
 const RoundButton: React.FC<RoundButtonProps> = ({ number, selected }) => {
   return (
     <button 
       className={`w-[30px] h-12 rounded-full border-white border-[1px] flex items-center justify-center text-white font-bold text-xl mr-[15px] mb-[10px] ${selected && 'bg-blue-300'}`}
     >
+      <p className={`${selected && 'text-slate-900'} text-[12px]`}>
       {number}
+      </p>
     </button>
   );
 };
 
 export const RoundButtonGroupMobile: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const localStorageData = localStorage.getItem('currentStep')
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -21,15 +26,17 @@ export const RoundButtonGroupMobile: React.FC = () => {
         setCurrentStep(parseInt(savedStep, 10));
       }
     };
+  }, []);
 
-    handleStorageChange();
-
-    window.addEventListener('storage', handleStorageChange);
-
+  useEffect(() => {
+    const disposer = autorun(() => {
+      setCurrentStep(stepStore.currentStep);
+    });
+    
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
+      disposer();
     };
-  }, [localStorage]);
+  }, [stepStore.currentStep]);
 
   return (
     <div className="flex mb-[70px]">
@@ -43,13 +50,14 @@ export const RoundButtonGroupMobile: React.FC = () => {
 
 export const RoundButtonGroupDesktop: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const localStorageData = localStorage.getItem('currentStep')
 
   useEffect(() => {
-    const savedStep = localStorage.getItem('currentStep');
+    const savedStep = localStorageData;
     if (savedStep) {
       setCurrentStep(parseInt(savedStep, 10));
     }
-  }, []);
+  }, [localStorageData]);
 
   return (
     <div className="block ml-[30px] mt-[50px]">
