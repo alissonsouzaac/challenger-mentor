@@ -1,7 +1,6 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import stepStore from './store/StepStore/StepStore'
 
 const DynamicInfoPerson = dynamic<any>((): any => import('./components/InfoPerson/InfoPerson'));
 const DynamicSelectPlan = dynamic<any>((): any => import('./components/SelectPlan/SelectPlan'));
@@ -17,7 +16,6 @@ export default function Home() {
       if (savedStep) {
           const parsedStep = parseInt(savedStep, 10);
           setStep(parsedStep);
-          stepStore.setStep(parsedStep);
       }
   }, []);
     
@@ -29,21 +27,18 @@ export default function Home() {
         } else {
           localStorage.removeItem('currentStep');
         }
-        stepStore.setStep(nextStepValue);
       }, [step, setStep]);
     
       const prevStep = useCallback(() => {
         const prevStepValue = Math.max(step - 1, 1);
         setStep(prevStepValue);
         localStorage.setItem('currentStep', String(prevStepValue));
-        stepStore.setStep(prevStepValue);
       }, [step, setStep]);
 
       const prevTwoSteps = useCallback(() => {
         const prevStepValue = Math.max(step - 2, 1);
         setStep(prevStepValue);
         localStorage.setItem('currentStep', String(prevStepValue));
-        stepStore.setStep(prevStepValue);
       }, [step, setStep]);
 
       switch (step) {

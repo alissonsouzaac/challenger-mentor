@@ -49,6 +49,7 @@ const SelectPlan: React.FC<IActionButtons> = ({ prevStep, nextStep }: IActionBut
     arcade: false,
     advanced: false,
     pro: false,
+    billingOption: 'Monthly',
   };
 
   const [formData, setFormData] = useState<selectPlanData>(initialValues);
@@ -58,7 +59,13 @@ const SelectPlan: React.FC<IActionButtons> = ({ prevStep, nextStep }: IActionBut
     const savedFormData = localStorage.getItem('formData');
     if (savedFormData) {
       const parsedFormData: selectPlanData = JSON.parse(savedFormData);
+      console.log(parsedFormData)
       setFormData(parsedFormData);
+      
+
+      if (parsedFormData.billingOption === 'Yearly') {
+        handleBillingOptionChange();
+      }
     }
   }, []);
 
@@ -153,7 +160,7 @@ const SelectPlan: React.FC<IActionButtons> = ({ prevStep, nextStep }: IActionBut
       </div>
       <div className='flex rounded-md mt-[25px] bg-gray-50 h-[35px] items-center justify-center sm:h-[50px] sm:w-[405px]'>
         <p className='relative right-[20px]'>Monthly</p>
-        <AntSwitch  
+        <AntSwitch 
           onChange={handleBillingOptionChange}
           inputProps={{ 'aria-label': 'ant design' }} 
         />

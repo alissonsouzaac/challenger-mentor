@@ -20,12 +20,12 @@ export const FinishUp: React.FC<IFinishUp> = ({ nextStep, prevStep, prevTwoStep}
     
         const selectedPlan = formData.arcade ? 'Arcade' : formData.advanced ? 'Advanced' : formData.pro ? 'Pro' : '';
 
-        const onlineServicePrice = formData.onlineService ? formData.onlineServicePrice : '';
-        const largerStoragePrice = formData.largerStorage ? formData.largerStoragePrice : '';
-        const customizableProfilePrice = formData.customizableProfile ? formData.customizableProfilePrice : '';
-        const planPrice = formData[selectedPlan.toLowerCase() + 'Price'] || '';
-
-        const total = onlineServicePrice + largerStoragePrice + customizableProfilePrice + planPrice;
+        const onlineServicePrice = formData.onlineService ? formData.onlineServicePrice : 0;
+        const largerStoragePrice = formData.largerStorage ? formData.largerStoragePrice : 0;
+        const customizableProfilePrice = formData.customizableProfile ? formData.customizableProfilePrice : 0;
+        const planPrice = formData[selectedPlan.toLowerCase() + 'Price'] || 0;
+        
+        const totalValue = planPrice + onlineServicePrice + largerStoragePrice + customizableProfilePrice;
 
         setFinishUpData({
           billingOption,
@@ -34,7 +34,7 @@ export const FinishUp: React.FC<IFinishUp> = ({ nextStep, prevStep, prevTwoStep}
           largerStoragePrice,
           customizableProfilePrice,
           planPrice,
-          total: total,
+          total: totalValue,
         });
       }, []);
 
@@ -66,19 +66,19 @@ export const FinishUp: React.FC<IFinishUp> = ({ nextStep, prevStep, prevTwoStep}
         </div>
         <div className="border-t border-gray-300" />
         <div className='flex flex-wrap'>
-            {finishUpData.onlineServicePrice && (
+            {finishUpData.onlineServicePrice !== 0 && (
                 <div className='flex items-center justify-between w-full mt-[7px]'>
                     <p className='text-gray-400 text-sm ml-[15px]'>Online Service</p>
                     <p className='text-blue-900 font-medium mr-[20px]'>+${finishUpData.onlineServicePrice}{option}</p>
                 </div>
             )}
-            {finishUpData.largerStoragePrice && (
+            {finishUpData.largerStoragePrice !== 0 && (
                 <div className='flex items-center justify-between w-full mt-[7px]'>
                     <p className='text-gray-400 text-sm ml-[15px]'>Larger Storage</p>
                     <p className='text-blue-900 font-medium mr-[20px]'>+${finishUpData.largerStoragePrice}{option}</p>
                 </div>
             )} 
-            {finishUpData.customizableProfilePrice && (
+            {finishUpData.customizableProfilePrice !== 0 && (
                 <div className='flex items-center justify-between w-full mt-[7px]'>
                     <p className='text-gray-400 text-sm ml-[15px]'>Customizable Profile</p>
                     <p className='text-blue-900 font-medium mr-[20px]'>+${finishUpData.customizableProfilePrice}{option}</p>
