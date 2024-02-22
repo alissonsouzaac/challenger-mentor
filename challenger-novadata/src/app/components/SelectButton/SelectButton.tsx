@@ -17,15 +17,12 @@ const RoundButton: React.FC<RoundButtonProps> = ({ number, selected }) => {
 
 export const RoundButtonGroupMobile: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const localStorageData = localStorage.getItem('currentStep')
 
   useEffect(() => {
-    const handleStorageChange = () => {
       const savedStep = localStorage.getItem('currentStep');
       if (savedStep) {
         setCurrentStep(parseInt(savedStep, 10));
       }
-    };
   }, []);
 
   useEffect(() => {
@@ -50,12 +47,21 @@ export const RoundButtonGroupMobile: React.FC = () => {
 
 export const RoundButtonGroupDesktop: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const localStorageData = localStorage.getItem('currentStep')
+  const localStorageData = localStorage.getItem('currentStep');
 
   useEffect(() => {
-    const savedStep = localStorageData;
-    if (savedStep) {
-      setCurrentStep(parseInt(savedStep, 10));
+    const disposer = autorun(() => {
+      setCurrentStep(stepStore.currentStep);
+    });
+    
+    return () => {
+      disposer();
+    };
+  }, [stepStore.currentStep]);
+
+  useEffect(() => {
+    if (localStorageData) {
+      setCurrentStep(parseInt(localStorageData, 10));
     }
   }, [localStorageData]);
 
