@@ -19,13 +19,6 @@ export const RoundButtonGroupMobile: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   useEffect(() => {
-      const savedStep = localStorage.getItem('currentStep');
-      if (savedStep) {
-        setCurrentStep(parseInt(savedStep, 10));
-      }
-  }, []);
-
-  useEffect(() => {
     const disposer = autorun(() => {
       setCurrentStep(stepStore.currentStep);
     });
@@ -34,6 +27,13 @@ export const RoundButtonGroupMobile: React.FC = () => {
       disposer();
     };
   }, [stepStore.currentStep]);
+
+  useEffect(() => {
+      const savedStep = localStorage.getItem('currentStep');
+      if (savedStep) {
+        setCurrentStep(parseInt(savedStep, 10));
+      }
+  }, []);
 
   return (
     <div className="flex mb-[70px]">
