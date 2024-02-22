@@ -54,6 +54,7 @@ const SelectPlan: React.FC<IActionButtons> = ({ prevStep, nextStep }: IActionBut
 
   const [formData, setFormData] = useState<selectPlanData>(initialValues);
   const [billingOption, setBillingOption] = useState<string>('Monthly');
+  const [switchChecked, setSwitchChecked] = useState<boolean>(billingOption === 'Yearly');
 
   useEffect(() => {
     const savedFormData = localStorage.getItem('formData');
@@ -68,7 +69,9 @@ const SelectPlan: React.FC<IActionButtons> = ({ prevStep, nextStep }: IActionBut
   }, []);
 
   const handleBillingOptionChange = () => {
-    setBillingOption(billingOption === 'Monthly' ? 'Yearly' : 'Monthly');
+    const newBillingOption = billingOption === 'Monthly' ? 'Yearly' : 'Monthly';
+    setBillingOption(newBillingOption);
+    setSwitchChecked(newBillingOption === 'Yearly');
   };
 
   const getPrice = (basePrice: number) => {
@@ -161,7 +164,7 @@ const SelectPlan: React.FC<IActionButtons> = ({ prevStep, nextStep }: IActionBut
         <AntSwitch 
           onChange={handleBillingOptionChange}
           inputProps={{ 'aria-label': 'ant design' }}
-          defaultChecked={billingOption === 'Monthly' ? false : true }
+          checked={switchChecked}
         />
         <p className='relative left-[20px]'>Yearly</p>
       </div>
