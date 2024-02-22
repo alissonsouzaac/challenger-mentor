@@ -160,7 +160,8 @@ const SelectPlan: React.FC<IActionButtons> = ({ prevStep, nextStep }: IActionBut
         <p className='relative right-[20px]'>Monthly</p>
         <AntSwitch 
           onChange={handleBillingOptionChange}
-          inputProps={{ 'aria-label': 'ant design' }} 
+          inputProps={{ 'aria-label': 'ant design' }}
+          defaultChecked={formData.billingOption === 'Monthly'}
         />
         <p className='relative left-[20px]'>Yearly</p>
       </div>
