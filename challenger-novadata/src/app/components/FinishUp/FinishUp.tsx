@@ -62,7 +62,7 @@ export const FinishUp: React.FC<IFinishUp> = ({ nextStep, prevStep, prevTwoStep}
                     Change
                 </p>
             </div>
-        <p className={`mt-[10px] font-bold text-blue-900 sm:ml-[165px] ${finishUpData.billingOption === 'Monthly' ? 'ml-[70px]' : 'ml-[60px]'}`}>${finishUpData.planPrice}{option}</p>
+        <p className={`mt-[10px] font-bold text-blue-900 sm:ml-[165px] ${finishUpData.billingOption === 'Monthly' ? 'ml-[70px] sm:ml-[170px]' : 'ml-[60px]'}`}>${finishUpData.planPrice}{option}</p>
         </div>
         <div className="border-t border-gray-300" />
         <div className='flex flex-wrap'>
